@@ -1,0 +1,14 @@
+canvas {
+  margin: auto;
+  border: 3px solid #333333;
+    font-size: 2.5rem;
+    border-radius: 1% 1% 1% 1% / 1% 1% 2% 4%;
+}
+
+.down_btn{
+  margin-top: 20px;
+}
+
+.down_bnt_w{
+  width:40%;
+}

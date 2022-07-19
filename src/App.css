@@ -1,0 +1,47 @@
+
+.App {
+  text-align: center;
+  background-color: #ECF3F7 ;
+
+}
+
+.nav {
+  overflow: hidden;
+
+  /* position: relative; */
+  padding-top: -100px;
+  margin-top:-50px;
+  padding-bottom: 50px;
+  /* box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; */
+  font-size: 24px;
+}
+
+.links {
+  margin-right: 50px;
+}
+
+
+body {
+  background-color: #ECF3F7;
+  color: white;
+  padding: 80px;
+  font-family: Arial;
+  text-align: center;
+}
+
+.navRight {
+  top: 10%;
+  align-items: baseline;
+}
+
+.navRightBox{
+  z-index: 0;
+  position: relative;
+}
+.amplify-tabs[data-indicator-position=top]{
+  direction: rtl;
+}
+
+.mainComponenet{
+  padding-right: 72px;
+}

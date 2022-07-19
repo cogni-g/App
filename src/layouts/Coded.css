@@ -1,0 +1,47 @@
+.App {
+  text-align: center;
+}
+
+.spant {
+  padding-left: 20px;
+  text-align: center;
+  direction: rtl;
+}
+
+.bodyy{
+  width: 60%;
+  height: 90%;
+  overflow:auto;
+}
+
+.labelsText{
+  display: inline-block;
+  margin-top: 30px;
+}
+
+.pic{
+    padding: 4rem 8rem;
+    display: inline-block;
+    border: 3px solid #333333;
+    font-size: 2.5rem;
+    border-radius: 1% 1% 1% 1% / 1% 1% 2% 4%;
+    text-transform: uppercase;
+    letter-spacing: 0.3ch;
+    background: #ffffff;
+    position: relative;
+    
+    
+
+}
+.code {
+  padding-top: 20px;
+}
+.sp {
+  direction: rtl;
+
+}
+
+.css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper{
+  margin-top: -80px;
+  margin-left: -300px;
+}
