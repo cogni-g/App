@@ -21,11 +21,27 @@ import { Authenticator, View, Image, translations  } from '@aws-amplify/ui-react
 import '@aws-amplify/ui-react/styles.css';
 
 import Amplify, { Auth } from 'aws-amplify';
-import awsconfig from './aws-exports';
 
-Amplify.configure(awsconfig);
-// >>New - Configuring Auth Module
-Auth.configure(awsconfig);
+Auth.configure({
+
+      // Amazon Cognito Identity Pool ID
+      identityPoolId: 'eu-west-1:d9e7bfc8-67e4-4322-a79c-3e46bff8e0cb',
+      
+      // Amazon Cognito Region
+      region: 'eu-west-1',
+
+      // Amazon Cognito User Pool ID
+      userPoolId: 'eu-west-1_iGN5mcrEQ',
+
+      // Amazon Cognito Web Client ID (26-char alphanumeric string)
+      userPoolWebClientId: 't68q4ft7msnb4i05vrd3cu6fh',
+      
+      // Enforce user authentication prior to accessing AWS resources or not
+      mandatorySignIn: false,
+
+      oauth: {},
+});
+
 
 I18n.putVocabularies(translations);
 I18n.setLanguage('heb');
