@@ -3,7 +3,8 @@ import Clock from './tests/Clock';
 import Si from './tests/Si';
 import HomePage from './layouts/Home';
 import Records from './layouts/Records';
-import React, { useState } from 'react';
+import Admin from './layouts/Admin';
+import React, { useState, useEffect } from 'react';
 import logo2 from './assets/images/logo2.png'
 import logo1 from './assets/images/logo.png'
 import { styled } from "@mui/material/styles";
@@ -14,13 +15,14 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import PlagiarismIcon from '@mui/icons-material/Plagiarism';
 import { createSvgIcon } from '@mui/material/utils';
+import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom'
 import { I18n} from 'aws-amplify';
 import { Authenticator, View, Image, translations  } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
-import Amplify, { Auth } from 'aws-amplify';
+import { Auth } from 'aws-amplify';
 
 Auth.configure({
 
@@ -45,9 +47,6 @@ Auth.configure({
 
 I18n.putVocabularies(translations);
 I18n.setLanguage('heb');
-
-
-
 I18n.putVocabularies({
   heb: {
     // sign-in
@@ -85,13 +84,20 @@ I18n.putVocabularies({
 });
 
 
+
 function App() {
   const [page, setPage] = useState(0);  
+  const [admin, setAdmin] = useState(false);  
   const drawerWidth = 240;
   const HomeIcon = createSvgIcon(
     <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />,
     'Home',
   );
+
+  useEffect(() => {
+    isAdmin()
+  });
+
   const openedMixin = (theme) => ({
     width: drawerWidth,
     transition: theme.transitions.create("width", {
@@ -143,6 +149,16 @@ function App() {
     },
   }
   
+  async function isAdmin() {
+    var user =  await Auth.currentAuthenticatedUser().then((user)=>{
+      var usreGroup = user.signInUserSession.accessToken.payload["cognito:groups"]
+      if (usreGroup === undefined){
+        return false
+      }
+      return usreGroup.includes('Admin')? true : false
+    });
+    setAdmin(user)
+  }
   
   return (
     <Authenticator components={components} signUpAttributes={['name']}>
@@ -183,6 +199,18 @@ function App() {
                   </ListItem>
                 </Link>
               </Tooltip>
+              {admin?    
+                <Tooltip title="הגדרות" arrow  placement="left">
+                  <Link className="links" to="/admin">
+                    <ListItem button key="Admin">
+                      <ListItemIcon>
+                        <SettingsIcon  color={page===2?"primary":"inherit"} onClick={(page)=>{setPage(3)}}/>
+                      </ListItemIcon>
+                    </ListItem>
+                  </Link>
+                </Tooltip>
+                :"" 
+              }
             </List>
           </Drawer>
             
@@ -208,9 +236,14 @@ function App() {
               <Routes>
                 <Route path="/tests/si"  element={<Si user={user}/>} />
               </Routes>
+              {admin?
+              <Routes>
+                <Route path="/admin"  element={<Admin/>} />
+              </Routes>
+              :""}
             </div>
 
-
+            
 
           </div>
         </header>
