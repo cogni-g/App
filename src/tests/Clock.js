@@ -2,7 +2,7 @@
 import React from 'react';
 import './Clock.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {  faEraser, faPen, faStop, faUndo } from '@fortawesome/free-solid-svg-icons'
+import {  faEraser, faPen, faUndo, faTrash} from '@fortawesome/free-solid-svg-icons'
 import TextField from '@mui/material/TextField';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
@@ -96,52 +96,122 @@ class Clock extends React.Component{
 
       case 1:
         return (
-          
-          <Card className="card">
-
+          <Card className="card">         
+            <div className="ageInput">
+              <ToggleButtonGroup
+                // className='toggle_container'
+                color="primary"
+                value={'' + this.state.gender}
+                exclusive ={true}
+                selected={true}
+                onChange={(event) => {this.setState({gender: parseInt(event.target.value)});}}
+              >
+                <ToggleButton value='0' key="0" bsStyle="primary" size='large'>נקבה</ToggleButton>
+                <ToggleButton value='1' key="1" bsStyle="primary" size='large' w>זכר</ToggleButton>
+              </ToggleButtonGroup>
             
-          <div className="ageInput">
-            <ToggleButtonGroup
-              // className='toggle_container'
-              color="primary"
-              value={'' + this.state.gender}
-              exclusive ={true}
-              selected={true}
-              onChange={(event) => {this.setState({gender: parseInt(event.target.value)});}}
-            >
-              <ToggleButton value='0' key="0" bsStyle="primary" size='large'>נקבה</ToggleButton>
-              <ToggleButton value='1' key="1" bsStyle="primary" size='large' w>זכר</ToggleButton>
-            </ToggleButtonGroup>
-          
-          <span> </span>
-          
-          <TextField  variant="filled" id="filled-basic" label="גיל"  helperText="הכנס גיל מטופל"  type="number" defaultValue={this.state.age}  
-            inputProps={{style: { textAlign: "right"}}}
-            InputLabelProps={{style: { textAlign: "right", width: "100%", }}}
-            FormHelperTextProps={{style: { textAlign: "right", width: "80%", }}}
-
-
-            onChange={(event) => {this.setState({age: parseInt(event.target.value)});}} 
-          />
-           
+            <span> </span>
             
-          </div>
-          <div className="btn">
-            <Button variant="contained" size="medium" disabled={(this.state.gender===-1) || (this.state.age===0)} onClick={() =>{
-              this.setState({now: Date.now()});
-              this.nextStep()
-            }}>
-              הבא
-            </Button>
+            <TextField  variant="filled" id="filled-basic" label="גיל"  helperText="הכנס גיל מטופל"  type="number" defaultValue={this.state.age}  
+              inputProps={{style: { textAlign: "right"}}}
+              InputLabelProps={{style: { textAlign: "right", width: "100%", }}}
+              FormHelperTextProps={{style: { textAlign: "right", width: "80%", }}}
 
-          </div>
+
+              onChange={(event) => {this.setState({age: parseInt(event.target.value)});}} 
+            />
+            
+              
+            </div>
+            <div className="btn">
+              <Button variant="contained" size="medium" disabled={(this.state.gender===-1) || (this.state.age===0)} onClick={() =>{
+                this.setState({now: Date.now()});
+                this.nextStep()
+              }}>
+                הבא
+              </Button>
+
+            </div>
           </Card>
-        )
-
-
-
+        );
 
       case 2:
+        return (
+          <Card className="card">
+            <div width="100%">
+              <div  className="gender">
+                <div className="gen">
+                 מין :  {this.state.gender?"זכר":"נקבה"} 
+                </div>
+                <div className="age">
+                 {this.state.age} : גיל
+                </div> 
+              </div >
+              <div>
+                <div className="drawCan">
+                  <ReactSketchCanvas
+                    ref={this.canvas}
+                    strokeWidth="2"
+                    strokeColor="black"
+                    width="400px"
+                    height="400px"
+                    withTimestamp="true"
+                  />
+                </div>
+                <div className="iconHandler">
+                  <IconButton aria-label="delete" size="medium" color={this.state.btnSelect===1?"primary":"inherit"} onClick={() => {
+                      // pen
+                      this.canvas.current.eraseMode(false)
+                      this.setState({btnSelect: 1});
+                    }}>
+                    <FontAwesomeIcon icon={faPen}/>
+                  </IconButton>
+                  <IconButton aria-label="delete" size="medium" color={this.state.btnSelect===2?"primary":"inherit"} onClick={() => {
+                      // earser
+                      this.canvas.current.eraseMode(true)
+                      this.setState({btnSelect: 2});
+                    }}>
+                    <FontAwesomeIcon icon={faEraser}/>
+                  </IconButton>
+                  <IconButton aria-label="delete" size="medium" color="inherit" onClick={() => {
+                      // undo
+                      this.canvas.current.undo()
+                      this.setState({count_undo: this.state.count_undo+1});
+                    }}>
+                    <FontAwesomeIcon icon={faUndo}/>
+                  </IconButton>
+                  <IconButton aria-label="delete" size="medium" color="inherit" onClick={() => {
+                      // clear
+                      this.canvas.current.clearCanvas()
+                      this.setState({count_reset: this.state.count_reset+1});
+                    }}>
+                    <FontAwesomeIcon icon={faTrash}/>
+                  </IconButton>
+
+                </div>
+                <div className="btn">
+
+                  <Button variant="contained" size="medium" onClick={() =>{
+                    this.setState({now: Date.now()});
+                    this.nextStep()
+                    }
+                  }>
+                    הבא
+                  </Button>
+                </div>
+                <div className="btn">
+                  <Button variant="outlined" size="medium" onClick={() =>{
+                    this.prevStep()
+                  }}>
+                    חזור למסך הקודם
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </Card>
+          );
+
+      case 3:
         return (
           <Card className="card">
             <div width="100%">
@@ -194,7 +264,7 @@ class Clock extends React.Component{
                       this.canvas.current.clearCanvas()
                       this.setState({count_reset: this.state.count_reset+1});
                     }}>
-                    <FontAwesomeIcon icon={faStop}/>
+                    <FontAwesomeIcon icon={faTrash}/>
                   </IconButton>
 
                 </div>
@@ -256,7 +326,7 @@ class Clock extends React.Component{
             </div>
           </Card>
           );
-        }
+      }
     }
 }
 export default Clock;
