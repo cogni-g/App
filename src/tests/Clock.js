@@ -17,11 +17,24 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 
+import { Box, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
+
 import Amplify from "@aws-amplify/core";
 import API from "@aws-amplify/api";
 import config from "../aws-exports";
 Amplify.configure(config);
 API.configure(config);
+
+const MenuProps = {
+  getContentAnchorEl: null,
+  PaperProps: {
+    style: {
+      maxHeight: 200,
+      marginLeft: "1px",
+      marginTop: "1px",
+    },
+  },
+};
 
 const Clock = ({ user }) => {
   const canvas = useRef();
@@ -49,7 +62,10 @@ const Clock = ({ user }) => {
   const prevStep = () => {
     setStep(step - 1);
   };
-
+  const handleLanguageChange = (e) => {
+    setLang(e.target.value);
+    console.log(lang);
+  };
   useEffect(() => {
     async function fetchData() {
       await API.get("apicogni", "/api/tests/clock/title", {
@@ -59,7 +75,7 @@ const Clock = ({ user }) => {
       });
     }
     fetchData();
-  }, []);
+  }, [lang]);
 
   const submitTest = async () => {
     await API.put("apicogni", "/api/tests/clock", {
@@ -92,6 +108,31 @@ const Clock = ({ user }) => {
     case 1:
       return (
         <Card className='card'>
+          {/* select box */}
+          <div className='selectBox'>
+            {" "}
+            <Box sx={{ maxWidth: 150, margin: "auto" }} variant='standard'>
+              <FormControl fullWidth>
+                <InputLabel id='demo-simple-select-label'>
+                  {/* Language */}
+                </InputLabel>
+                <Select
+                  MenuProps={MenuProps}
+                  // defaultValue={"heb"}
+                  labelId='demo-simple-select-label'
+                  id='demo-simple-select'
+                  value={lang}
+                  onChange={handleLanguageChange}
+                >
+                  <MenuItem value={"heb"} selected>
+                    עברית
+                  </MenuItem>
+                  <MenuItem value={"eng"}>English</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </div>
+
           <div className='ageInput'>
             <ToggleButtonGroup
               // className='toggle_container'

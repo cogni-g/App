@@ -11,11 +11,7 @@ import Amplify from "@aws-amplify/core";
 import API from "@aws-amplify/api";
 import config from "../aws-exports";
 
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import { Box, InputLabel, MenuItem, FormControl, Select } from "@mui/material";
 
 Amplify.configure(config);
 API.configure(config);
@@ -395,6 +391,7 @@ class Si extends React.Component {
       case 1:
         return (
           <Card className='card'>
+            {/* select box */}
             <div className='selectBox'>
               {" "}
               <Box sx={{ maxWidth: 150, margin: "auto" }} variant='standard'>
