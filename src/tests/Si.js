@@ -10,8 +10,26 @@ import Typography from "@mui/material/Typography";
 import Amplify from "@aws-amplify/core";
 import API from "@aws-amplify/api";
 import config from "../aws-exports";
+
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+
 Amplify.configure(config);
 API.configure(config);
+
+const MenuProps = {
+  getContentAnchorEl: null,
+  PaperProps: {
+    style: {
+      maxHeight: 200,
+      marginLeft: "1px",
+      marginTop: "1px",
+    },
+  },
+};
 
 class Si extends React.Component {
   constructor(props) {
@@ -23,6 +41,7 @@ class Si extends React.Component {
     this.getSenSenRank = this.getSenSenRank.bind(this);
     this.getSenAvoiRank = this.getSenAvoiRank.bind(this);
     this.calculate = this.calculate.bind(this);
+
     this.state = {
       step: 1,
       lang: "heb",
@@ -343,6 +362,10 @@ class Si extends React.Component {
     // this.setState({step: 1})
   };
 
+  handleLanguageChange = () => {
+    this.setState({ lang: (this.state.lang = "eng") });
+  };
+
   // function for going to next step by increasing step state by 1
   nextStep = () => {
     this.setState({ step: this.state.step + 1 });
@@ -372,6 +395,29 @@ class Si extends React.Component {
       case 1:
         return (
           <Card className='card'>
+            <div className='selectBox'>
+              {" "}
+              <Box sx={{ maxWidth: 150, margin: "auto" }} variant='standard'>
+                <FormControl fullWidth>
+                  <InputLabel id='demo-simple-select-label'>
+                    {/* Language */}
+                  </InputLabel>
+                  <Select
+                    MenuProps={MenuProps}
+                    defaultValue={"heb"}
+                    labelId='demo-simple-select-label'
+                    id='demo-simple-select'
+                    value={this.lang}
+                    onChange={this.handleLanguageChange}
+                  >
+                    <MenuItem value={"heb"} selected>
+                      עברית
+                    </MenuItem>
+                    <MenuItem value={"eng"}>English</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            </div>
             <div>
               <TextField
                 style={{ direction: "rtl" }}
