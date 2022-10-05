@@ -43,16 +43,11 @@ const Clock = ({ user }) => {
   const [btnSelect, setBtnSelect] = useState(1);
   const [tilte, setTilte] = useState("");
   const [lang, setLang] = useState("heb");
-  const [date, setDate] = useState("getCurrentTime()");
   const [gender, setGender] = useState(-1);
   const [age, setAge] = useState(null);
-  const [img_base64, setImg_base64] = useState("");
-  const [path, setPath] = useState([]);
-  const [sketchTime, setSketchTime] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [count_path, setCount_path] = useState(0);
   const [count_reset, setCount_reset] = useState(0);
   const [count_undo, setCount_undo] = useState(0);
+
   // function for going to next step by increasing step state by 1
   const nextStep = () => {
     setStep(step + 1);
@@ -66,6 +61,42 @@ const Clock = ({ user }) => {
     setLang(e.target.value);
     console.log(lang);
   };
+  //
+  //
+  //
+  const handleSubmit = async () => {
+    const img_base64 = await canvas.current.exportImage("png");
+
+    //pat
+    const datePath = await canvas.current.exportPaths();
+
+    //time
+    const first = datePath[0].startTimestamp;
+    const last = datePath.slice(-1)[0].endTimestamp;
+
+    //request
+    await API.put("apicogni", "/api/tests/clock", {
+      body: {
+        user: user.username,
+        date: Date.now(),
+        gender: gender,
+        age: age,
+        img_base64: img_base64,
+        path: datePath,
+        sketchTime: last - first,
+        startTime: first - now,
+        count_path: datePath.length,
+        count_reset: count_reset,
+        count_undo: count_undo,
+        isCoded: 0,
+        isCircle: "",
+        isNumbers: "",
+        isDirect: "",
+      },
+    });
+    window.location.href = "../";
+  };
+
   useEffect(() => {
     async function fetchData() {
       await API.get("apicogni", "/api/tests/clock/title", {
@@ -76,30 +107,6 @@ const Clock = ({ user }) => {
     }
     fetchData();
   }, [lang]);
-
-  const submitTest = async () => {
-    await API.put("apicogni", "/api/tests/clock", {
-      body: {
-        user: user.username,
-        date: date,
-        gender: gender,
-        age: age,
-        img_base64: img_base64,
-        path: path,
-        sketchTime: sketchTime,
-        startTime: startTime,
-        count_path: count_path,
-        count_reset: count_reset,
-        count_undo: count_undo,
-        isCoded: 0,
-        isCircle: "",
-        isNumbers: "",
-        isDirect: "",
-      },
-    }).then(() => {
-      window.location.href = "../";
-    });
-  };
 
   switch (step) {
     default:
@@ -360,44 +367,8 @@ const Clock = ({ user }) => {
                 <Button
                   variant='contained'
                   size='medium'
-                  onClick={() => {
-                    //img
-                    canvas.current
-                      .exportImage("png")
-                      .then((data) => {
-                        setImg_base64(data);
-                      })
-                      .then((data) => {
-                        //date
-                        setDate(Date.now());
-                      })
-                      .then((data) => {
-                        //path
-                        canvas.current.exportPaths().then((data) => {
-                          setPath(data);
-                        });
-                      })
-                      .then(() => {
-                        setCount_path(path.length);
-                      })
-                      .then(() => {
-                        //time
-                        canvas.current.getSketchingTime().then((data) => {
-                          const first = path[0].startTimestamp;
-                          const last = path.slice(-1)[0].endTimestamp;
-
-                          setSketchTime(last - first);
-                        });
-                      })
-                      .then(() => {
-                        //time from start to first draw
-                        const first = path[0].startTimestamp;
-                        setStartTime(first - now);
-                      })
-                      .then(() => {
-                        submitTest();
-                      });
-                  }}
+                  onClick={handleSubmit}
+                  //img
                 >
                   הגשה
                 </Button>
