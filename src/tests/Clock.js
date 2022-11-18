@@ -296,6 +296,7 @@ const Clock = ({ user }) => {
                 <ReactSketchCanvas
                   ref={canvas}
                   strokeWidth='2'
+                  canvasColor='#FFFFDF'
                   strokeColor='black'
                   width='400px'
                   height='400px'
