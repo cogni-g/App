@@ -59,22 +59,16 @@ const Clock = ({ user }) => {
   };
   const handleLanguageChange = (e) => {
     setLang(e.target.value);
-    console.log(lang);
   };
-  //
-  //
-  //
+
   const handleSubmit = async () => {
     const img_base64 = await canvas.current.exportImage("png");
 
-    //pat
     const datePath = await canvas.current.exportPaths();
 
-    //time
-    const first = datePath[0].startTimestamp;
-    const last = datePath.slice(-1)[0].endTimestamp;
+    const time_first_path = datePath[0].startTimestamp;
+    const time_last_path = datePath.slice(-1)[0].endTimestamp;
 
-    //request
     await API.put("apicogni", "/api/tests/clock", {
       body: {
         user: user.username,
@@ -83,8 +77,8 @@ const Clock = ({ user }) => {
         age: age,
         img_base64: img_base64,
         path: datePath,
-        sketchTime: last - first,
-        startTime: first - now,
+        sketchTime: time_last_path - time_first_path,
+        startTime: time_first_path - now,
         count_path: datePath.length,
         count_reset: count_reset,
         count_undo: count_undo,
@@ -115,17 +109,13 @@ const Clock = ({ user }) => {
     case 1:
       return (
         <Card className='card'>
-          {/* select box */}
           <div className='selectBox'>
             {" "}
             <Box sx={{ maxWidth: 150, margin: "auto" }} variant='standard'>
               <FormControl fullWidth>
-                <InputLabel id='demo-simple-select-label'>
-                  {/* Language */}
-                </InputLabel>
+                <InputLabel id='demo-simple-select-label'></InputLabel>
                 <Select
                   MenuProps={MenuProps}
-                  // defaultValue={"heb"}
                   labelId='demo-simple-select-label'
                   id='demo-simple-select'
                   value={lang}
@@ -142,7 +132,6 @@ const Clock = ({ user }) => {
 
           <div className='ageInput'>
             <ToggleButtonGroup
-              // className='toggle_container'
               color='primary'
               value={"" + gender}
               exclusive={true}
@@ -186,7 +175,6 @@ const Clock = ({ user }) => {
               size='medium'
               disabled={gender === -1 || age === 0}
               onClick={() => {
-                setNow(Date.now());
                 nextStep();
               }}
             >
@@ -209,6 +197,7 @@ const Clock = ({ user }) => {
                 <ReactSketchCanvas
                   ref={canvas}
                   strokeWidth='2'
+                  canvasColor='#FFFFDF'
                   strokeColor='black'
                   width='400px'
                   height='400px'
