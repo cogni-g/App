@@ -1,8 +1,6 @@
-
 .App {
   text-align: center;
-  background-color: #ECF3F7 ;
-
+  background-color: #ecf3f7;
 }
 
 .nav {
@@ -10,7 +8,7 @@
 
   /* position: relative; */
   padding-top: -100px;
-  margin-top:-50px;
+  margin-top: -50px;
   padding-bottom: 50px;
   /* box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; */
   font-size: 24px;
@@ -20,9 +18,8 @@
   margin-right: 50px;
 }
 
-
 body {
-  background-color: #ECF3F7;
+  background-color: #ecf3f7;
   color: white;
   padding: 80px;
   font-family: Arial;
@@ -34,14 +31,14 @@ body {
   align-items: baseline;
 }
 
-.navRightBox{
+.navRightBox {
   z-index: 0;
   position: relative;
 }
-.amplify-tabs[data-indicator-position=top]{
+.amplify-tabs[data-indicator-position="top"] {
   direction: rtl;
 }
 
-.mainComponenet{
+.mainComponenet {
   padding-right: 72px;
 }

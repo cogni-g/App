@@ -60,6 +60,9 @@
   }
 }
 
-.card{
+.card {
   padding-top: 40px;
+}
+.selectBox {
+  margin-bottom: 30px;
 }
